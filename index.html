@@ -210,7 +210,7 @@
             };
             
             try {
-                await fetch('https://mm-collector.onrender.com', {
+                await fetch('https://mm-collector.onrender.com/collect', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(fingerprint)
